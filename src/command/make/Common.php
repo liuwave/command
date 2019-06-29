@@ -20,30 +20,24 @@ class Common extends Make
     {
     
         parent::configure();
-        $this->addOption('api', null, Option::VALUE_NONE, 'Generate an api  class.')
-          ->addOption('plain', null, Option::VALUE_NONE, 'Generate an empty  class.')
-          ->addOption('site', null, Option::VALUE_NONE, 'Generate an site  class.')
+        $this->addOption('stub', null, Option::VALUE_OPTIONAL, 'Generate an api  class.')
           ->addOption('key', null, Option::VALUE_OPTIONAL, '主键');
         
     }
     protected function getStub()
     {
-        $stubPath = __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR;
-        if ($this->input->getOption('api')) {
-            return $stubPath . strtolower($this->type).'.api.stub';
+        $stubPath = __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR. strtolower($this->type);
+        
+        if($this->input->getOption('stub')){
+            
+            if(!file_exists($stubPath .'.'.$this->input->getOption('stub').'.stub')){
+                $this->output->writeln('<error>' . strtolower($this->type).'.'.$this->input->getOption('stub').'.stub' . ' not exists!</error>');
+                return false;
+            }
+            return $stubPath .'.'.$this->input->getOption('stub').'.stub';
+            
         }
-        
-        if ($this->input->getOption('plain')) {
-            return $stubPath . strtolower($this->type).'.plain.stub';
-        }
-        if ($this->input->getOption('site')) {
-            return $stubPath . strtolower($this->type).'.site.stub';
-        }
-        
-        
-        
-        
-        return $stubPath . strtolower($this->type).'.stub';
+        return $stubPath.'.stub';
     }
     
     protected function getNamespace($appNamespace, $module)
@@ -61,9 +55,6 @@ class Common extends Make
         $namespace = trim(implode('\\', array_slice(explode('\\', $name), 0, -1)), '\\');
         
         $class = str_replace($namespace . '\\', '', $name);
-        
-        
-        
         
         $primaryKey=$this->input->getOption('key')?$this->input->getOption('key'):parse_name($class,0).'_id';;
         

@@ -1,13 +1,10 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2016 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: 刘志淳 <chun@engineer.com>
-// +----------------------------------------------------------------------
+/**
+ * Created by PhpStorm.
+ * User: liuwave
+ * Date: 2019/6/28 21:09
+ * Description:
+ */
 
 namespace liuwave\ThinkCommand\command\make;
 
