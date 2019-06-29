@@ -1,11 +1,22 @@
 {
     "name": "liuwave/command",
     "type": "think-extend",
+    "description": "thinkphp 创建类库文件命令扩展",
+
     "authors": [
         {
             "name": "laywave",
             "email": "laywave@qq.com"
         }
+    ],
+    "keywords": [
+        "thinkphp",
+        "创建类库文件",
+        "自定义命令扩展",
+        "think extend",
+        "console",
+        "make command",
+        "thinkphp5扩展"
     ],
     "require": {
         "topthink/framework": "~5.1"
