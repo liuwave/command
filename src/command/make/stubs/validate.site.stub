@@ -35,10 +35,9 @@ class {%className%} extends Validate
         // 自定义验证规则
         protected function checkNameUnique($value, $rule, $data)
         {
-            $model = \app\common\model\{%className%}::get([
-                'name' => $data['name'],
-                'site_id'=>$data['site_id']
-            ]);
+            $model = \app\common\model\{%className%}::where('name',$data['name'])
+                ->where('site_id',$data['site_id'])
+                ->find();
             if ($model) {
                 if (isset($data['{%primary_key%}']) && $data['{%primary_key%}'] > 0) {//如果是编辑
                     return $model['{%primary_key%}'] == $data['{%primary_key%}'] ? true : '名称重复';

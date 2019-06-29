@@ -35,16 +35,13 @@ class {%className%} extends Base
             ->order($order)
             ->page($page,$page_size)
             ->select();
-        foreach ($list as $value){
-
-        }
         $result=[
             'page'=>$page,
             'page_size'=>$page_size,
             'list'=>$list,
             'total'=>\app\common\model\{%className%}::where($where)->count()
         ];
-        return $this->buildSuccess($result);
+        return $this->throwSuccess($result);
         //
     }
 
@@ -62,16 +59,17 @@ class {%className%} extends Base
 		$data['site_id']=$this->siteId;
         $result=$this->validate($data,'{%className%}.create');
         if(true!==$result){
-            return $this->buildError(ReturnCode::VALIDATE_ERROR,$result);
+            return $this->throwError(ReturnCode::VALIDATE_ERROR,$result);
         }
 
         try{
             \app\common\model\{%className%}::create($data);
-            return $this->buildSuccess();
         }
         catch (Exception $exception){
             return $this->throwError(ReturnCode::DB_INSERT_ERROR,'创建错误',['error'=>$exception->getMessage()]);
         }
+        return $this->throwSuccess();
+
 
     }
 
@@ -89,9 +87,9 @@ class {%className%} extends Base
             ->where('{%primary_key%}',$id)
             ->find();
         if(!$data){
-            return $this->buildError(ReturnCode::DB_NOT_EXISTS,'未找到对应数据');
+            return $this->throwError(ReturnCode::DB_NOT_EXISTS,'未找到对应数据');
         }
-        return $this->buildSuccess($data);
+        return $this->throwSuccess($data);
     }
 
     /**
@@ -109,7 +107,7 @@ class {%className%} extends Base
              ->where('{%primary_key%}',$id)
              ->find();
         if(!$data){
-            return $this->buildError(ReturnCode::DB_NOT_EXISTS,'未找到对应数据');
+            return $this->throwError(ReturnCode::DB_NOT_EXISTS,'未找到对应数据');
         }
         $newData=$request->only([
             'community_id','company_id','name',
@@ -118,16 +116,17 @@ class {%className%} extends Base
         $newData['site_id']=$this->siteId;
         $result=$this->validate($newData,'{%className%}.modify');
         if(true!==$result){
-            return $this->buildError(ReturnCode::VALIDATE_ERROR,$result);
+            return $this->throwError(ReturnCode::VALIDATE_ERROR,$result);
         }
 
         try{
             $data->save($newData);
-            return $this->buildSuccess();
+
         }
         catch (Exception $exception){
             return $this->throwError(ReturnCode::DB_UPDATE_ERROR,'更新错误',['error'=>$exception->getMessage()]);
         }
+        return $this->throwSuccess();
     }
 
     /**
@@ -144,15 +143,16 @@ class {%className%} extends Base
              ->where('{%primary_key%}',$id)
              ->find();
         if(!$data){
-            return $this->buildError(ReturnCode::DB_NOT_EXISTS,'未找到对应数据');
+            return $this->throwError(ReturnCode::DB_NOT_EXISTS,'未找到对应数据');
         }
 
         try{
             $data->delete();
-            return $this->buildSuccess();
+
         }
         catch (Exception $exception){
-            return $this->buildError(ReturnCode::DB_DELETE_ERROR, '删除错误');
+            return $this->throwError(ReturnCode::DB_DELETE_ERROR, '删除错误');
          }
+         return $this->throwSuccess();
     }
 }
