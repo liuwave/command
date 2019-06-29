@@ -18,7 +18,7 @@ class Common extends Make
     
     protected function configure()
     {
-    
+        
         parent::configure();
         $this->addOption('stub', null, Option::VALUE_OPTIONAL, 'Generate an api  class.')
           ->addOption('key', null, Option::VALUE_OPTIONAL, '主键');
@@ -26,29 +26,37 @@ class Common extends Make
     }
     protected function getStub()
     {
+        $defaultPath=__DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR;
+        $userStubPath=Config::get('command.stub_path');
         
         
-        $stubPath = trim(empty(Config::get('command.stub_path'))?
-          __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR:Config::get('command.stub_path'));
-        
-        $stubPath=str_replace(['\\','/'],DIRECTORY_SEPARATOR,$stubPath);
-        
-        $stubPath=rtrim($stubPath,DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
-    
-        $stubPath.=strtolower($this->type);
-        
+        $filename=strtolower($this->type);
         if($this->input->getOption('stub')){
-             $stubPath .='.'.$this->input->getOption('stub').'.stub';
+            $filename .='.'.$this->input->getOption('stub').'.stub';
         }
         else{
-            $stubPath.='.stub';
+            $filename.='.stub';
         }
-    
-        if(!file_exists($stubPath .'.'.$this->input->getOption('stub').'.stub')){
-            $this->output->writeln('<error>' .$stubPath . ' not exists!</error>');
+        
+        if(!empty($userStubPath)){
+            $userStubPath=str_replace(['\\','/'],DIRECTORY_SEPARATOR,$userStubPath);
+            $userStubPath=rtrim($userStubPath,DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$filename;
+            if(file_exists($userStubPath)){
+                return $userStubPath;
+            }
+            else{
+                $this->output->writeln('<tips>' .$userStubPath . ' 不存在，尝试加载默认设置</tips>');
+                
+            }
+        }
+        
+        $defaultPath.=$filename;
+        
+        if(!file_exists($defaultPath)){
+            $this->output->writeln('<error>' .$defaultPath . ' not exists!</error>');
             return false;
         }
-        return $stubPath;
+        return $defaultPath;
     }
     
     protected function getNamespace($appNamespace, $module)
