@@ -8,7 +8,7 @@ use think\Model;
 class {%className%} extends Model
 {
     //
-    protected $pk = '{%primary_key%}_id';
+    protected $pk = '{%primary_key%}';
 
 
 

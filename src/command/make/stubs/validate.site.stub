@@ -13,7 +13,7 @@ class {%className%} extends Validate
      * @var array
      */	
 	protected $rule = [
-	 '{%className%}_id'=>'require|number|>:0',
+	 '{%primary_key%}'=>'require|number|>:0',
 	 'site_id'=>'require|number|>:0',
      'name|单元名称'=>'require|min:2|checkNameUnique',
      'status|状态'=>'in:valid,invalid',
@@ -29,7 +29,7 @@ class {%className%} extends Validate
 
         protected $scene =[
           'create'=>['site_id','building_id','company_id','name','status']  ,
-          'modify'=>['{%className%}_id','site_id','building_id','company_id','name','status']  ,
+          'modify'=>['{%primary_key%}','site_id','building_id','company_id','name','status']  ,
         ];
 
         // 自定义验证规则
@@ -40,8 +40,8 @@ class {%className%} extends Validate
                 'site_id'=>$data['site_id']
             ]);
             if ($model) {
-                if (isset($data['{%className%}_id']) && $data['{%className%}_id'] > 0) {//如果是编辑
-                    return $model['{%className%}_id'] == $data['{%className%}_id'] ? true : '名称重复';
+                if (isset($data['{%primary_key%}']) && $data['{%primary_key%}'] > 0) {//如果是编辑
+                    return $model['{%primary_key%}'] == $data['{%primary_key%}'] ? true : '名称重复';
                 } else {
                     return '名称重复';
                 }
