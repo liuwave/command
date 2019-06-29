@@ -1,0 +1,23 @@
+<?php
+
+namespace {%namespace%};
+
+use think\facade\Config;
+use think\Model;
+
+class {%className%} extends Model
+{
+    //
+    protected $pk = '{%primary_key%}_id';
+
+
+
+
+        // 定义全局的查询范围
+        protected $globalScope = ['site'];
+
+        public function scopeSite($query)
+        {
+            $query->where($query->getTable() . '.site_id', Config::get('site.site_id'));
+        }
+}

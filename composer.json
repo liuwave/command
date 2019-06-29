@@ -1,0 +1,25 @@
+{
+    "name": "liuwave/command",
+    "authors": [
+        {
+            "name": "laywave",
+            "email": "laywave@qq.com"
+        }
+    ],
+    "require": {
+        "topthink/framework": "~5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "liuwave\\ThinkCommand\\": "src/"
+        },
+        "files": [
+            "src/common.php"
+        ]
+    },
+    "extra": {
+        "think-config": {
+            "command": "src/config.php"
+        }
+    }
+}
