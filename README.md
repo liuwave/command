@@ -79,7 +79,7 @@ class {%className%} extends Validate
 
 ```
 
-# stub 默认替换文件
+# stub 默认替换字段
 
 - {%className%} ： 类名
 - {%actionSuffix%}： TP5 配置中的 action_suffix值
