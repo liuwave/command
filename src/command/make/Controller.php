@@ -6,15 +6,7 @@
  * Description:
  */
 namespace liuwave\ThinkCommand\command\make;
-
-use think\console\Command;
-use think\console\command\Make;
-use think\console\Input;
-use think\console\input\Argument;
-use think\console\input\Option;
-use think\console\Output;
 use think\facade\Config;
-use think\facade\App;
 
 class Controller extends Common
 {

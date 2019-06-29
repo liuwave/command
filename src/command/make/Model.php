@@ -8,10 +8,7 @@
 
 namespace liuwave\ThinkCommand\command\make;
 
-use think\console\command\Make;
-use think\console\input\Option;
-use think\facade\App;
-use think\facade\Config;
+
 
 class Model extends Common
 {
