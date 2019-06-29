@@ -26,18 +26,29 @@ class Common extends Make
     }
     protected function getStub()
     {
-        $stubPath = __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR. strtolower($this->type);
+        
+        
+        $stubPath = trim(empty(Config::get('command.stub_path'))?
+          __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR:Config::get('command.stub_path'));
+        
+        $stubPath=str_replace(['\\','/'],DIRECTORY_SEPARATOR,$stubPath);
+        
+        $stubPath=rtrim($stubPath,DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+    
+        $stubPath.=strtolower($this->type);
         
         if($this->input->getOption('stub')){
-            
-            if(!file_exists($stubPath .'.'.$this->input->getOption('stub').'.stub')){
-                $this->output->writeln('<error>' . strtolower($this->type).'.'.$this->input->getOption('stub').'.stub' . ' not exists!</error>');
-                return false;
-            }
-            return $stubPath .'.'.$this->input->getOption('stub').'.stub';
-            
+             $stubPath .='.'.$this->input->getOption('stub').'.stub';
         }
-        return $stubPath.'.stub';
+        else{
+            $stubPath.='.stub';
+        }
+    
+        if(!file_exists($stubPath .'.'.$this->input->getOption('stub').'.stub')){
+            $this->output->writeln('<error>' .$stubPath . ' not exists!</error>');
+            return false;
+        }
+        return $stubPath;
     }
     
     protected function getNamespace($appNamespace, $module)

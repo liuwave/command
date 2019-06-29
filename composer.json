@@ -1,5 +1,6 @@
 {
     "name": "liuwave/command",
+    "type": "think-extend",
     "authors": [
         {
             "name": "laywave",

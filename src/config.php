@@ -6,5 +6,5 @@
  */
 
 return [
-
+    'stub_path'=>''
 ];
