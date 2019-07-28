@@ -30,7 +30,6 @@ class {%className%} extends Base
         if(!empty($sort['field'])){
             $order[$sort['field']]=(!empty($sort['sort']) && $sort['sort']=='desc'  )?'desc':'asc';
         }
-        $where[]=['site_id','=',$this->siteId];
         $list=\app\common\model\{%className%}::where($where)
             ->order($order)
             ->page($page,$page_size)
@@ -83,8 +82,7 @@ class {%className%} extends Base
     {
         //
         $id=intval($id);
-        $data=\app\common\model\{%className%}::where('site_id',$this->siteId)
-            ->where('{%primary_key%}',$id)
+        $data=\app\common\model\{%className%}::where('{%primary_key%}',$id)
             ->find();
         if(!$data){
             return $this->throwError(ReturnCode::DB_NOT_EXISTS,'未找到对应数据');
@@ -103,8 +101,7 @@ class {%className%} extends Base
     {
         //
         $id=(int)$id;
-        $data=\app\common\model\{%className%}::where('site_id',$this->siteId)
-             ->where('{%primary_key%}',$id)
+        $data=\app\common\model\{%className%}::where('{%primary_key%}',$id)
              ->find();
         if(!$data){
             return $this->throwError(ReturnCode::DB_NOT_EXISTS,'未找到对应数据');
@@ -139,8 +136,7 @@ class {%className%} extends Base
     {
         //
         $id=(int)$id;
-        $data=\app\common\model\{%className%}::where('site_id',$this->siteId)
-             ->where('{%primary_key%}',$id)
+        $data=\app\common\model\{%className%}::where('{%primary_key%}',$id)
              ->find();
         if(!$data){
             return $this->throwError(ReturnCode::DB_NOT_EXISTS,'未找到对应数据');

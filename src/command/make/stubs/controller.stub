@@ -2,9 +2,151 @@
 
 namespace {%namespace%};
 
+use app\common\controller\Base;
 use think\Controller;
+use think\Request;
+use app\common\util\ReturnCode;
+use think\Exception;
 
-class {%className%} extends Controller
+
+class {%className%} extends Base
 {
-    //
+    /**
+     * 显示资源列表
+     *
+     * @return \think\Response
+     */
+    public function getList()
+    {
+        $filter=input('filter/a',[],'trim');
+        $sort=input('sort/a');
+        $page=input('page/d',1);
+        $page_size=input('page_size/d',50);
+        $where=[];
+        if(!empty($filter['keywords'])){
+            $where[]=['name','like','%'.trim($filter['keywords']).'%'];
+        }
+        $order=[];
+        if(!empty($sort['field'])){
+            $order[$sort['field']]=(!empty($sort['sort']) && $sort['sort']=='desc'  )?'desc':'asc';
+        }
+        $list=\app\common\model\{%className%}::where($where)
+            ->order($order)
+            ->page($page,$page_size)
+            ->select();
+        $result=[
+            'page'=>$page,
+            'page_size'=>$page_size,
+            'list'=>$list,
+            'total'=>\app\common\model\{%className%}::where($where)->count()
+        ];
+        return $this->throwSuccess($result);
+        //
+    }
+
+    /**
+     * 保存新建的资源
+     *
+     * @param  \think\Request  $request
+     * @return \think\Response
+     */
+    public function create(Request $request)
+    {
+        $data=$request->only([
+            'community_id','company_id','name',
+        ],'post');
+        $result=$this->validate($data,'{%className%}.create');
+        if(true!==$result){
+            return $this->throwError(ReturnCode::VALIDATE_ERROR,$result);
+        }
+
+        try{
+            \app\common\model\{%className%}::create($data);
+        }
+        catch (Exception $exception){
+            return $this->throwError(ReturnCode::DB_INSERT_ERROR,'创建错误',['error'=>$exception->getMessage()]);
+        }
+        return $this->throwSuccess();
+
+
+    }
+
+    /**
+     * 显示指定的资源
+     *
+     * @param  int  $id
+     * @return \think\Response
+     */
+    public function detail($id=0)
+    {
+        //
+        $id=intval($id);
+        $data=\app\common\model\{%className%}::where('{%primary_key%}',$id)
+            ->find();
+        if(!$data){
+            return $this->throwError(ReturnCode::DB_NOT_EXISTS,'未找到对应数据');
+        }
+        return $this->throwSuccess($data);
+    }
+
+    /**
+     * 保存更新的资源
+     *
+     * @param  \think\Request  $request
+     * @param  int  $id
+     * @return \think\Response
+     */
+    public function modify(Request $request, $id=0)
+    {
+        //
+        $id=(int)$id;
+        $data=\app\common\model\{%className%}::where('{%primary_key%}',$id)
+             ->find();
+        if(!$data){
+            return $this->throwError(ReturnCode::DB_NOT_EXISTS,'未找到对应数据');
+        }
+        $newData=$request->only([
+            'community_id','company_id','name',
+        ],'post');
+        $newData['{%primary_key%}']=$id;
+        $result=$this->validate($newData,'{%className%}.modify');
+        if(true!==$result){
+            return $this->throwError(ReturnCode::VALIDATE_ERROR,$result);
+        }
+
+        try{
+            $data->save($newData);
+
+        }
+        catch (Exception $exception){
+            return $this->throwError(ReturnCode::DB_UPDATE_ERROR,'更新错误',['error'=>$exception->getMessage()]);
+        }
+        return $this->throwSuccess();
+    }
+
+    /**
+     * 删除指定资源
+     *
+     * @param  int  $id
+     * @return \think\Response
+     */
+    public function remove($id=0)
+    {
+        //
+        $id=(int)$id;
+        $data=\app\common\model\{%className%}::where('{%primary_key%}',$id)
+             ->find();
+        if(!$data){
+            return $this->throwError(ReturnCode::DB_NOT_EXISTS,'未找到对应数据');
+        }
+
+        try{
+            $data->delete();
+
+        }
+        catch (Exception $exception){
+            return $this->throwError(ReturnCode::DB_DELETE_ERROR, '删除错误');
+         }
+         return $this->throwSuccess();
+    }
 }

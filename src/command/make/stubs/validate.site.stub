@@ -36,7 +36,6 @@ class {%className%} extends Validate
         protected function checkNameUnique($value, $rule, $data)
         {
             $model = \app\common\model\{%className%}::where('name',$data['name'])
-                ->where('site_id',$data['site_id'])
                 ->find();
             if ($model) {
                 if (isset($data['{%primary_key%}']) && $data['{%primary_key%}'] > 0) {//如果是编辑
